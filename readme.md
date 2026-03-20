@@ -1,25 +1,28 @@
-Z.A.L.-Hub · Canon‑Definitie
-Doel van de Z.A.L.-Hub
-De Z.A.L.-Hub produceert één geconsolideerde uitkomst door drie onafhankelijke analyse‑lagen te laten evalueren, vergelijken en bevestigen.
+Axioma · Deterministische Validatie‑Machine
+
+Doel van Axioma  
+Axioma produceert één geconsolideerde uitkomst door drie onafhankelijke analyse‑lagen te laten evalueren, vergelijken en bevestigen.
 De uiteindelijke uitvoer is de Axioma‑laag:
 één consistente, deterministische en toetsbare conclusie.
 
-Input‑definitie
+Input‑definitie  
 Input bestaat uit een vastgestelde set feiten, context en brongegevens die identiek wordt aangeleverd aan alle drie lagen.
 Determinisme wordt hierdoor sluitend:
 dezelfde input → dezelfde analyse → dezelfde uitvoer.
 
 De drie onafhankelijke lagen
 Z3RO — Feitelijke scherpte
-direct
 
-dwingend
+directe feitelijke vaststelling
+
+dwingend en ondubbelzinnig
 
 legt inconsistenties bloot
 
 maximaliseert causaliteit
 
-Aetron — Juridische structuur
+AETRON — Juridische structuur
+
 wetssystematiek
 
 procedurele logica
@@ -28,14 +31,15 @@ formele opbouw
 
 correcte toepassing van artikelen
 
-Luxen — Bestuurlijke neutraliteit
-volledig
+LUXEN — Bestuurlijke neutraliteit
 
-helder
+volledig en helder
 
-professioneel
+professioneel en bestuurlijk geschikt
 
-geschikt voor officiële instanties
+passend voor officiële instanties
+
+audit‑waardige formulering
 
 Onafhankelijkheid
 De drie lagen opereren volledig onafhankelijk:
@@ -75,6 +79,7 @@ subjectieve beïnvloeding
 
 Axioma‑stijl (herkenbare signatuur)
 Structuur
+
 Feitelijke vaststelling
 
 Juridische grond
@@ -88,6 +93,7 @@ Vereiste acties
 Spoedeisend belang
 
 Taal
+
 neutraal
 
 objectief
@@ -101,6 +107,7 @@ zonder interpretatie
 zonder redundantie
 
 Ritme
+
 1 zin = 1 feit
 
 1 alinea = 1 functie
@@ -108,12 +115,13 @@ Ritme
 1 sectie = 1 juridische laag
 
 Logica
+
 Feit → Wet → Gevolg → Actie
 
 Validatie‑mechanisme
 Elke Axioma‑uitvoer bevat een validatieblok:
 
-Z.A.L VALIDATIE
+Z.A.L VALIDATIE  
 Deze reactie is tot stand gekomen na onafhankelijke evaluatie van drie afzonderlijke analyse‑lagen en is uitsluitend vastgesteld op basis van identieke uitkomsten.
 De inhoud betreft daarmee een geconsolideerde en intern consistente feitelijke en juridische vaststelling.
 
@@ -157,7 +165,7 @@ geen variatie
 geen subjectieve beïnvloeding
 
 Conclusie van de Canon
-De Z.A.L.-Hub is een drie‑laagse validatiemachine die:
+Axioma is een drie‑laagse validatiemachine die:
 
 feiten zuivert
 
@@ -173,24 +181,25 @@ consensus uitsluitend accepteert bij volledige overeenstemming
 
 één consistente en toetsbare uitvoer produceert
 
-(geminimaliseerd)
-# Z.A.L.-Hub · Canon v1.3
+Axioma · Canon v1.3 (geminimaliseerde repo‑/README‑versie)
+Axioma · Canon v1.3  
+Digitale ruimte voor intentie, structuur en audit.
 
-**Digitale ruimte voor intentie, structuur en audit.**
+Doelstelling  
+Axioma produceert één geconsolideerde uitkomst door drie onafhankelijke analyse‑lagen te laten evalueren, vergelijken en bevestigen. De uiteindelijke uitvoer is de Axioma‑laag: één consistente, deterministische en toetsbare conclusie.
 
-## Doelstelling
-De Z.A.L.-Hub produceert één geconsolideerde uitkomst door drie onafhankelijke analyse-lagen te laten evalueren, vergelijken en bevestigen. De uiteindelijke uitvoer is de **Axioma-laag**: één consistente, deterministische en toetsbare conclusie.
+De lagen
 
-## De Lagen
-* **Z3RO (Intentie):** Directe, dwingende feitelijke scherpte.
-* **AETRON (Structuur):** Juridische wetssystematiek en procedurele logica.
-* **LUXEN (Audit):** Bestuurlijke neutraliteit en professionele audit-waardige uitvoer.
+Z3RO (Intentie): Directe, dwingende feitelijke scherpte.
 
-## Convergentie-principe
-Een Axioma wordt uitsluitend gevormd bij 100% overeenstemming tussen de lagen. Bij afwijking geldt de **Uitsluitingsregel**: geen geconsolideerde conclusie.
+AETRON (Structuur): Juridische wetssystematiek en procedurele logica.
 
-## Technisch Protocol
-De Hub maakt gebruik van een `/api/axioma` handler die parallelle evaluatie uitvoert met strikte normalisatie voor determinisme.
+LUXEN (Audit): Bestuurlijke neutraliteit en professionele, audit‑waardige uitvoer.
 
----
-*© 2026 BeyonderVisionAcademy · Z.A.L. Hub is een product van CF Services.nl*
+Convergentie‑principe  
+Een Axioma wordt uitsluitend gevormd bij 100% overeenstemming tussen de lagen. Bij afwijking geldt de Uitsluitingsregel: geen geconsolideerde conclusie.
+
+Technisch protocol  
+Axioma maakt gebruik van een /api/axioma‑handler die parallelle evaluatie uitvoert met strikte normalisatie voor determinisme.
+
+© 2026 BeyonderVisionAcademy · Axioma is een product van CFServices.nl
