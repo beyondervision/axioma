@@ -6,13 +6,12 @@
     <style>
         :root { --accent: #00f2ff; --bg: #0b0f19; --panel: #161b22; --text: #e6edf3; --axioma: #f2ff00; }
         body { margin: 0; font-family: sans-serif; background: var(--bg); color: var(--text); text-align: center; }
-        .panel { max-width: 600px; margin: 50px auto; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
-        textarea { width: 100%; height: 100px; background: #0d1117; color: #fff; border: 1px solid #30363d; padding: 10px; box-sizing: border-box; resize: none; }
-        button { width: 100%; padding: 15px; margin-top: 10px; background: var(--axioma); font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; }
-        .log { margin-top: 20px; text-align: left; font-family: monospace; font-size: 12px; padding: 10px; background: #0d1117; border-left: 3px solid var(--accent); min-height: 100px; }
-        .axiom { color: var(--axioma); }
-        .card { border: 1px solid var(--axioma); padding: 15px; margin: 20px auto; text-align: left; background: var(--panel); cursor: pointer; transition: 0.2s; }
-        .card:hover { border-color: var(--accent); }
+        .panel { max-width: 600px; margin: 50px auto; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        textarea { width: 100%; height: 100px; background: #0d1117; color: #fff; border: 1px solid #30363d; padding: 10px; box-sizing: border-box; resize: none; font-size: 16px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: var(--axioma); color: #000; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+        .log { margin-top: 20px; text-align: left; font-family: monospace; font-size: 13px; padding: 15px; background: #0d1117; border-left: 3px solid var(--accent); min-height: 120px; line-height: 1.5; white-space: pre-wrap; }
+        .axiom { color: var(--axioma); font-weight: bold; }
+        .card { border: 1px solid var(--axioma); padding: 20px; margin: 20px auto; text-align: left; background: var(--panel); max-width: 600px; }
         a { color: var(--accent); text-decoration: none; }
     </style>
 </head>
@@ -20,40 +19,47 @@
     <h1>Z.A.L Gateway</h1>
     <div class="panel">
         <textarea id="input" placeholder="Stel je vraag over Suriname of de status..."></textarea>
-        <button onclick="resoneer()">RESONEER</button>
-        <div id="log" class="log">> Systeem gereed. Wacht op input...</div>
+        <button id="resBtn" onclick="resoneer()">RESONEER</button>
+        <div id="log" class="log">> Systeem gereed voor publieke resonantie...</div>
     </div>
 
-    <div class="card" style="max-width: 600px;" onclick="window.location.href='resonant/clifton.html'">
-        <strong style="color:var(--axioma)">Z.A.L.-Hub (Resonantie-laag)</strong><br>
+    <div class="card">
+        <strong style="color:var(--axioma)">Z.A.L.-Hub (Initiator-laag)</strong><br>
         Digitale regie en validatie.<br>
-        📧 <a href="mailto:info@cfservices.ai" onclick="event.stopPropagation()">info@cfservices.ai</a> | 🌐 <a href="https://www.cfservices.nl" target="_blank" onclick="event.stopPropagation()">cfservices.nl</a>
+        📧 <a href="mailto:info@cfservices.ai">info@cfservices.ai</a> | 🌐 <a href="https://www.cfservices.nl" target="_blank">cfservices.nl</a>
     </div>
 
     <script>
         async function resoneer() {
             const log = document.getElementById("log");
-            const input = document.getElementById("input").value;
-            if(!input.trim()) return;
+            const btn = document.getElementById("resBtn");
+            const inputVal = document.getElementById("input").value.trim();
             
+            if(!inputVal) return log.innerHTML = "> FOUT: Geen intentie ingevoerd.";
+            
+            btn.disabled = true;
             log.innerHTML = "> Convergentie gestart via /api/axioma...";
+            
             try {
                 const res = await fetch('/api/axioma', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ input })
+                    body: JSON.stringify({ input: inputVal })
                 });
 
-                // Controle op JSON integriteit
-                const contentType = res.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Server stuurde geen JSON. Controleer /api/axioma op Vercel.");
-                }
-
+                if (!res.ok) throw new Error(`HTTP status ${res.status}`);
+                
                 const data = await res.json();
-                log.innerHTML = `> Z3RO: ${data.Z3RO}<br>> AETRON: ${data.AETRON}<br>> LUXEN: ${data.LUXEN}<br><br><span class="axiom">> AXIOMA GEVORMD</span><br><span class="axiom">> ${data.validatie}</span>`;
+                
+                log.innerHTML = `> Z3RO: ${data.Z3RO}\n` +
+                                `> AETRON: ${data.AETRON}\n` +
+                                `> LUXEN: ${data.LUXEN}\n\n` +
+                                `<span class="axiom">> AXIOMA GEVORMD</span>\n` +
+                                `<span class="axiom">> ${data.validatie}</span>`;
             } catch (e) { 
-                log.innerHTML = `<span style="color:#ff4444">> FOUT: ${e.message}</span>`; 
+                log.innerHTML = `<span style="color:#ff4444">> FOUT: Verbinding mislukt.</span>\n> Details: ${e.message}\n> Controleer of 'api/axioma.js' aanwezig is.`; 
+            } finally {
+                btn.disabled = false;
             }
         }
     </script>
