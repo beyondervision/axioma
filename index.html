@@ -20,14 +20,17 @@
         header p { color: var(--subtle); margin-top: .5rem; }
         .gateway { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
         .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        textarea { width: 100%; height: 150px; background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; color: var(--text); resize: none; font-size: 16px; box-sizing: border-box; }
+        textarea { width: 100%; height: 150px; background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; color: var(--text); resize: none; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+        textarea:focus { border-color: var(--accent); outline: none; }
         .buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         button { padding: 12px; border: 1px solid var(--border); background: #21262d; color: var(--text); cursor: pointer; transition: .2s; font-weight: bold; text-transform: uppercase; font-size: 11px; }
-        button:hover { border-color: var(--accent); color: var(--accent); }
+        button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
         button.primary { grid-column: span 3; background: var(--axioma); color: #000; font-size: 18px; border: none; margin-top: 10px; letter-spacing: 2px; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
         .log { margin-top: 20px; max-height: 220px; overflow: auto; font-family: monospace; font-size: 13px; border-left: 3px solid var(--accent); padding: 10px; background: #0d1117; }
-        .entry { margin-bottom: 8px; }
+        .entry { margin-bottom: 8px; border-bottom: 1px solid rgba(48,54,61,0.2); padding-bottom: 4px; }
         .axiom { color: var(--axioma); font-weight: bold; }
+        .error-msg { color: #ff4444; }
         section { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
         h2 { text-align: center; color: var(--subtle); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
@@ -52,14 +55,14 @@
 
 <div class="gateway">
     <div class="panel">
-        <textarea id="input" placeholder="Spreek je intentie of voer feiten in..."></textarea>
+        <textarea id="input" placeholder="Spreek je intentie..."></textarea>
         <div class="buttons">
             <button onclick="agent('Z3RO')">Z3RO</button>
             <button onclick="agent('AETRON')">AETRON</button>
             <button onclick="agent('LUXEN')">LUXEN</button>
             <button id="resBtn" class="primary" onclick="resoneer()">RESONEER</button>
         </div>
-        <div id="log" class="log"><div class="entry" style="color:var(--subtle)">> Systeem gereed. Wacht op input...</div></div>
+        <div id="log" class="log"><div class="entry" style="color:var(--subtle)">> Systeem gereed. Wacht op input voor resonantie...</div></div>
     </div>
 </div>
 
@@ -113,34 +116,39 @@
         if(!input) return addLog("Geen input gedetecteerd.");
         
         resBtn.disabled = true;
-        addLog("Convergentie gestart. Lokale Axioma-engine geactiveerd...");
+        addLog("Convergentie gestart via Vercel Edge...");
 
         try {
-            // --- WWW Call (Realtime Data uit Almere) ---
-            addLog("WWW-Call: Ophalen omgevingsdata...");
-            const weatherRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=52.37&longitude=5.22&current_weather=true");
-            const weatherData = await weatherRes.json();
-            const temp = weatherData?.current_weather?.temperature || "onbekend";
+            const res = await fetch('/api/axioma', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input: input })
+            });
+            
+            if (!res.ok) throw new Error(`HTTP status ${res.status}`);
+            
+            const data = await res.json();
 
-            // --- Lokale Canon Validatie ---
-            setTimeout(() => {
-                addLog("Z3RO: Feitelijke analyse voltooid. Temperatuur Almere: " + temp + "°C.");
-                addLog("AETRON: Juridische structuur bevestigd conform Canon v1.3.");
-                addLog("LUXEN: Bestuurlijke neutraliteit gevalideerd.");
-                
+            if(data.status === "axioma") {
+                addLog("Z3RO: " + data.Z3RO);
+                addLog("AETRON: " + data.AETRON);
+                addLog("LUXEN: " + data.LUXEN);
                 addLog("AXIOMA GEVORMD", "axiom");
-                addLog("Z.A.L VALIDATIE: Deze reactie is tot stand gekomen na onafhankelijke evaluatie van drie afzonderlijke analyse-lagen en is uitsluitend vastgesteld op basis van identieke uitkomsten.", "axiom");
-                resBtn.disabled = false;
-            }, 800);
-
+                addLog(data.validatie, "axiom");
+            } else if (data.status === "geen_axioma") {
+                addLog("UITSLUITING: Geen consensus over '" + input + "'", "system");
+            } else {
+                addLog("FOUT: " + (data.message || "Onverwachte data-structuur"), "error-msg");
+            }
         } catch(e) { 
-            addLog("SYSTEEMFOUT: Verbinding met WWW-bron onderbroken.", "system");
+            addLog("FOUT: API-route op Vercel niet bereikbaar. (" + e.message + ")", "error-msg"); 
+        } finally {
             resBtn.disabled = false;
         }
     }
 
     function agent(name) { addLog(name + " analyse-laag gereed."); }
-    function go(path) { addLog("Opening: " + path); window.location.href = path; }
+    function go(path) { addLog("Navigatie naar: " + path); window.location.href = path; }
 
     inputEl.addEventListener("keydown", e => {
         if(e.key === "Enter" && !e.shiftKey) { e.preventDefault(); resoneer(); }
