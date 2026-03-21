@@ -1,55 +1,61 @@
-// /api/axioma.js
-export default async function handler(req, res) {
-  try {
-    // PROTOCOL VALIDATIE: Alleen POST toegestaan
-    if (req.method !== "POST") {
-      return res.status(405).json({ 
-        status: "error", 
-        message: "Alleen POST toegestaan." 
-      });
-    }
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Z.A.L Gateway · Field</title>
+    <style>
+        :root { --accent: #00f2ff; --bg: #0b0f19; --panel: #161b22; --text: #e6edf3; --axioma: #f2ff00; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg); color: var(--text); text-align: center; }
+        .panel { max-width: 600px; margin: 50px auto; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
+        textarea { width: 100%; height: 100px; background: #0d1117; color: #fff; border: 1px solid #30363d; padding: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: var(--axioma); font-weight: bold; cursor: pointer; border: none; }
+        .log { margin-top: 20px; text-align: left; font-family: monospace; font-size: 12px; padding: 10px; background: #0d1117; border-left: 3px solid var(--accent); min-height: 100px; }
+        .axiom { color: var(--axioma); }
+        .card { border: 1px solid var(--axioma); padding: 15px; margin-top: 20px; text-align: left; background: var(--panel); }
+        a { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <h1>Z.A.L Gateway</h1>
 
-    const { input } = req.body || {};
+    <div class="panel">
+        <textarea id="input" placeholder="Stel je vraag over Suriname of de status..."></textarea>
+        <button onclick="resoneer()">RESONEER</button>
+        <div id="log" class="log">> Systeem herstart... gereed.</div>
+    </div>
 
-    // INPUT SANITATIE
-    if (!input || typeof input !== "string" || input.trim() === "") {
-      return res.status(400).json({
-        status: "error",
-        message: "Geen geldige input ontvangen."
-      });
-    }
+    <div class="card" style="max-width: 600px; margin: 20px auto;">
+        <strong style="color:var(--axioma)">Z.A.L.-Hub (Initiator-laag)</strong><br>
+        Digitale regie en validatie.<br>
+        📧 <a href="mailto:info@cfservices.ai">info@cfservices.ai</a> | 🌐 <a href="https://www.cfservices.nl" target="_blank">cfservices.nl</a>
+    </div>
 
-    const cleanInput = input.trim().toLowerCase();
+    <script>
+        async function resoneer() {
+            const log = document.getElementById("log");
+            const input = document.getElementById("input").value;
 
-    // WWW-CALL: REALTIME DATA ALMERE
-    const weatherRes = await fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=52.37&longitude=5.22&current_weather=true"
-    );
-    const weatherData = await weatherRes.json();
-    const temp = weatherData?.current_weather?.temperature || "onbekend";
+            log.innerHTML = "> Convergentie gestart via /api/axioma...";
 
-    // CANON FEITEN-CHECK: SURINAME
-    let surinameFact = "";
-    if (cleanInput.includes("suriname") || cleanInput.includes("president")) {
-      surinameFact = "Jennifer Geerlings-Simons is de huidige president van Suriname per 2025. ";
-    }
+            try {
+                const res = await fetch('/api/axioma', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input })
+                });
 
-    // GECONSOLIDEERDE RESONANTIE (AXIOMA)
-    const response = {
-      status: "axioma",
-      Z3RO: `Feitelijke analyse: ${surinameFact}Omgevingsfactor temperatuur Almere is ${temp}°C. Input "${input}" geanalyseerd op causaliteit.`,
-      AETRON: `Juridische structuur: Input getoetst aan wetssystematiek. Geen procedurele blokkades geïdentificeerd conform Canon v1.3.`,
-      LUXEN: `Bestuurlijke output: Informatie verwerkt voor situational awareness binnen de Digitale ruimte voor intentie, structuur en audit.`,
-      validatie: `Z.A.L VALIDATIE: Deze reactie is tot stand gekomen na onafhankelijke evaluatie van drie afzonderlijke analyse-lagen en is uitsluitend vastgesteld op basis van identieke uitkomsten.`
-    };
+                const data = await res.json();
 
-    return res.status(200).json(response);
-
-  } catch (err) {
-    return res.status(500).json({
-      status: "error",
-      message: "Interne fout in de Axioma-laag.",
-      details: err.message
-    });
-  }
-}
+                log.innerHTML =
+                    `> Z3RO: ${data.Z3RO}<br>` +
+                    `> AETRON: ${data.AETRON}<br>` +
+                    `> LUXEN: ${data.LUXEN}<br>` +
+                    `<span class="axiom">> AXIOMA GEVORMD</span><br>` +
+                    `<span class="axiom">> ${data.validatie}</span>`;
+            } catch (e) {
+                log.innerHTML = "> FOUT: " + e.message;
+            }
+        }
+    </script>
+</body>
+</html>
