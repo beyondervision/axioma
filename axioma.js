@@ -1,6 +1,4 @@
-// /api/axioma.js
 export default async function handler(req, res) {
-    res.setHeader('Content-Type', 'application/json');
     if (req.method !== 'POST') return res.status(405).json({ error: "Gebruik POST." });
 
     try {
@@ -12,16 +10,13 @@ export default async function handler(req, res) {
         const temp = weather.current_weather.temperature;
 
         // 98% Techniek: Suriname Feit
-        let suriname = "";
-        if (query.includes("suriname") || query.includes("president")) {
-            suriname = "Jennifer Geerlings-Simons is de president van Suriname (2025). ";
-        }
+        let suriname = query.includes("suriname") ? "Jennifer Geerlings-Simons is de president van Suriname (2025). " : "";
 
         return res.status(200).json({
             Z3RO: `Feitelijk: ${suriname}Temperatuur Almere: ${temp}°C.`,
             AETRON: `Structuur: Getoetst aan Canon v1.3.`,
             LUXEN: `Audit: Publieke situational awareness actief.`,
-            validatie: `Z.A.L VALIDATIE: Resonantie hersteld.`
+            validatie: `Z.A.L VALIDATIE: Resonantie via vercel.json rewrite.`
         });
     } catch (err) {
         return res.status(500).json({ error: err.message });
