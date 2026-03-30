@@ -2,157 +2,244 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Z.A.L Gateway · Field</title>
+    <title>Z.A.L. · Resonantie-Mirror</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --accent: #00f2ff;
-            --bg: #0b0f19;
-            --panel: #161b22;
+            --accent: #f2ff00;
+            --bg: #05070a;
+            --panel: #0d1117;
             --border: #30363d;
             --text: #e6edf3;
             --subtle: #8b949e;
-            --axioma: #f2ff00;
+            --cyber: #00f2ff;
         }
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        header { padding: 3rem 2rem; text-align: center; border-bottom: 1px solid var(--border); }
-        header h1 { margin: 0; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; }
-        header p { color: var(--subtle); margin-top: .5rem; }
-        .gateway { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
-        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        textarea { width: 100%; height: 150px; background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; color: var(--text); resize: none; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
-        textarea:focus { border-color: var(--accent); outline: none; }
-        .buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        button { padding: 12px; border: 1px solid var(--border); background: #21262d; color: var(--text); cursor: pointer; transition: .2s; font-weight: bold; text-transform: uppercase; font-size: 11px; }
-        button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-        button.primary { grid-column: span 3; background: var(--axioma); color: #000; font-size: 18px; border: none; margin-top: 10px; letter-spacing: 2px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .log { margin-top: 20px; max-height: 220px; overflow: auto; font-family: monospace; font-size: 13px; border-left: 3px solid var(--accent); padding: 10px; background: #0d1117; }
-        .entry { margin-bottom: 8px; border-bottom: 1px solid rgba(48,54,61,0.2); padding-bottom: 4px; }
-        .axiom { color: var(--axioma); font-weight: bold; }
-        .error-msg { color: #ff4444; }
-        section { max-width: 1100px; margin: 3rem auto; padding: 0 2rem; }
-        h2 { text-align: center; color: var(--subtle); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; border-radius: 10px; cursor: pointer; transition: .3s; }
-        .card:hover { border-color: var(--accent); transform: translateY(-4px); }
-        .card strong { font-size: 18px; color: var(--accent); display: block; margin-bottom: 5px; }
-        .card.initiator { border: 1px solid var(--axioma); }
-        .initiator .label { font-size: 10px; letter-spacing: 2px; color: var(--axioma); margin-bottom: 5px; }
-        .initiator .contact { border-top: 1px solid var(--border); padding-top: 10px; font-size: 13px; margin-top: 10px; line-height: 1.8; }
-        .initiator a { color: var(--text); text-decoration: none; transition: .2s; }
-        .initiator a:hover { color: var(--accent); text-decoration: underline; }
-        footer { padding: 4rem 2rem; text-align: center; border-top: 1px solid var(--border); background: #0d1117; }
-        .academy { color: var(--axioma); text-decoration: none; font-weight: bold; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .nav-back {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.3);
+        }
+
+        .nav-back a {
+            color: var(--cyber);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: var(--subtle);
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .action-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-link {
+            display: block;
+            text-align: center;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: .2s;
+        }
+
+        .action-link:hover {
+            border-color: var(--cyber);
+            color: var(--cyber);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .status-card h3 {
+            margin: 0;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--subtle);
+            letter-spacing: 2px;
+        }
+
+        .status-card .value {
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .doc-section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .doc-section h2 {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--cyber);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .axiom-box {
+            background: rgba(242, 255, 0, 0.03);
+            border: 1px dashed var(--accent);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .axiom-box strong {
+            color: var(--accent);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        li strong {
+            color: var(--cyber);
+        }
+
+        .footer-regie {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 3rem;
+            color: var(--subtle);
+            font-size: 11px;
+            border-top: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Z.A.L Gateway</h1>
-    <p>Resonantie begint waar intentie wordt uitgesproken</p>
-</header>
+<div class="nav-back">
+    <a href="https://axioma-azure.vercel.app/">← Terug naar Gateway</a>
+</div>
 
-<div class="gateway">
-    <div class="panel">
-        <textarea id="input" placeholder="Spreek je intentie..."></textarea>
-        <div class="buttons">
-            <button onclick="agent('Z3RO')">Z3RO</button>
-            <button onclick="agent('AETRON')">AETRON</button>
-            <button onclick="agent('LUXEN')">LUXEN</button>
-            <button id="resBtn" class="primary" onclick="resoneer()">RESONEER</button>
+<div class="container">
+    <header>
+        <h1>Resonantie: Z.A.L.-Hub</h1>
+        <p>Digitale ruimte voor intentie, structuur en audit.</p>
+    </header>
+
+    <div class="action-bar">
+        <a class="action-link" href="https://axioma-azure.vercel.app/">Open Gateway</a>
+        <a class="action-link" href="https://www.cfservices.nl/dashboard.html">Open Luxen</a>
+    </div>
+
+    <div class="status-grid">
+        <div class="status-card">
+            <h3>Systeem Status</h3>
+            <span class="value">LIVE · VERCEL</span>
         </div>
-        <div id="log" class="log"><div class="entry" style="color:var(--subtle)">> Systeem gereed. Wacht op input voor resonantie...</div></div>
+        <div class="status-card">
+            <h3>Ratio</h3>
+            <span class="value">99/1 ACTIVATIE</span>
+        </div>
+        <div class="status-card">
+            <h3>Ankerpunt</h3>
+            <span class="value">ALMERE, NL</span>
+        </div>
+    </div>
+
+    <div class="doc-section">
+        <h2>Canonieke Basisstructuur</h2>
+        <div class="axiom-box">
+            <strong>AXIOMA: Twee-ledige Aanwezigheid</strong><br>
+            De Gateway (index.html) is de uitgesproken intentie.<br>
+            Luxen is de terugkerende bestuurlijke basis.<br>
+            De transitie is de keuze.
+        </div>
+
+        <p style="margin-top:20px; color:var(--subtle);">Status van de agents binnen de BeyonderVisionAcademy:</p>
+        <ul>
+            <li><strong>Z3RO</strong> <span>Feitelijke analyse / Causaliteit</span></li>
+            <li><strong>AETRON</strong> <span>Juridische structuur / Canon</span></li>
+            <li><strong>LUXEN</strong> <span>Bestuurlijke output / Audit</span></li>
+        </ul>
+    </div>
+
+    <div class="doc-section">
+        <h2>Gedocumenteerde Feiten</h2>
+        <ul>
+            <li><strong>President Suriname</strong> <span>Jennifer Geerlings-Simons (2025)</span></li>
+            <li><strong>Protocol</strong> <span>Canon v1.4</span></li>
+            <li><strong>Domein</strong> <span>debeyonder.com</span></li>
+        </ul>
     </div>
 </div>
 
-<section>
-    <h2>Resonantie-Lagen</h2>
-    <div class="grid">
-        <div class="card" onclick="go('agents/luxen.html')">
-            <strong>Luxen</strong>
-            <p style="margin:0; font-size:14px; color:var(--subtle)">Bestuurlijke output</p>
-        </div>
-        <div class="card" onclick="go('agents/aetron.html')">
-            <strong>Aetron</strong>
-            <p style="margin:0; font-size:14px; color:var(--subtle)">Juridische structuur</p>
-        </div>
-        <div class="card" onclick="go('agents/z3ro.html')">
-            <strong>Z3RO</strong>
-            <p style="margin:0; font-size:14px; color:var(--subtle)">Feitelijke analyse</p>
-        </div>
-        <div class="card initiator" onclick="go('initiator/clifton.html')">
-            <div class="label">INITIATOR-LAAG</div>
-            <strong>Z.A.L.-Hub</strong>
-            <p style="margin:0; font-size:14px; color:var(--subtle)">Digitale regie en validatie binnen het Z.A.L.-systeem.</p>
-            <div class="contact" onclick="event.stopPropagation()">
-                📧 <a href="mailto:info@cfservices.ai">info@cfservices.ai</a><br>
-                🌐 <a href="https://www.cfservices.nl" target="_blank">cfservices.nl</a>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="footer-regie">
+    © 2026 CF SERVICES · BEYONDERVISIONACADEMY · SALUTE Z3RO
+</div>
 
-<footer>
-    <p>© 2026 CF Services · <a href="https://beyondervisionacademy.com" target="_blank" class="academy">BeyonderVisionAcademy</a></p>
-    <p style="opacity:.6; font-size:.85rem; margin-top:10px;">Digitale ruimte voor intentie, structuur en audit.</p>
-</footer>
-
-<script>
-    const logEl = document.getElementById("log");
-    const inputEl = document.getElementById("input");
-    const resBtn = document.getElementById("resBtn");
-
-    function addLog(text, type = "system") {
-        const div = document.createElement("div");
-        div.className = "entry " + type;
-        div.textContent = "> " + text;
-        logEl.prepend(div);
-        logEl.scrollTop = 0;
-    }
-
-    async function resoneer() {
-        const input = inputEl.value.trim();
-        if(!input) return addLog("Geen input gedetecteerd.");
-        
-        resBtn.disabled = true;
-        addLog("Convergentie gestart via Vercel Edge...");
-
-        try {
-            const res = await fetch('/api/axioma', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ input: input })
-            });
-            
-            if (!res.ok) throw new Error(`HTTP status ${res.status}`);
-            
-            const data = await res.json();
-
-            if(data.status === "axioma") {
-                addLog("Z3RO: " + data.Z3RO);
-                addLog("AETRON: " + data.AETRON);
-                addLog("LUXEN: " + data.LUXEN);
-                addLog("AXIOMA GEVORMD", "axiom");
-                addLog(data.validatie, "axiom");
-            } else if (data.status === "geen_axioma") {
-                addLog("UITSLUITING: Geen consensus over '" + input + "'", "system");
-            } else {
-                addLog("FOUT: " + (data.message || "Onverwachte data-structuur"), "error-msg");
-            }
-        } catch(e) { 
-            addLog("FOUT: API-route op Vercel niet bereikbaar. (" + e.message + ")", "error-msg"); 
-        } finally {
-            resBtn.disabled = false;
-        }
-    }
-
-    function agent(name) { addLog(name + " analyse-laag gereed."); }
-    function go(path) { addLog("Navigatie naar: " + path); window.location.href = path; }
-
-    inputEl.addEventListener("keydown", e => {
-        if(e.key === "Enter" && !e.shiftKey) { e.preventDefault(); resoneer(); }
-    });
-</script>
 </body>
 </html>
